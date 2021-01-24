@@ -11,6 +11,18 @@ extern "C" {
 #include "lvgl/src/lvgl.h"
 #endif
 
+typedef struct {
+	uint16_t x;
+	uint16_t y;
+	uint16_t min;
+	uint16_t max;
+	lv_obj_t* bar;
+	lv_obj_t* label_sv;
+	lv_obj_t* label_pv;
+	lv_obj_t* label_lo;
+	lv_obj_t* label_hi;
+} hmi_control_t;
+
 /*
  * Initialize
  */
@@ -43,22 +55,16 @@ static lv_obj_t *hmi_led_recirculation_switch;
  * ------------
  */
 
-/** current temperature [0..50.0 ℃]  */
-static lv_obj_t *hmi_label_current_temperature;
+/** temperature control */
+static hmi_control_t hmi_control_temperature;
 /** current humidity [0..99.0 %RH]  */
 static lv_obj_t *hmi_label_current_humidity;
 /** current CO2 concentration [0..2000 ppm]  */
 static lv_obj_t *hmi_label_current_co2;
-/** setpoint temperature [0..50.0 ℃]  */
-static lv_obj_t *hmi_label_setpoint_temperature;
 /** setpoint humidity [0..99.0 %RH]  */
 static lv_obj_t *hmi_label_setpoint_humidity;
 /** setpoint CO2 concentration [0..2000 ppm]  */
 static lv_obj_t *hmi_label_setpoint_co2;
-/** indicator temperature low [on, off] */
-static lv_obj_t *hmi_led_control_temperature_low;
-/** indicator temperature high [on, off] */
-static lv_obj_t *hmi_led_control_temperature_high;
 /** indicator humidity low [on, off] */
 static lv_obj_t *hmi_led_control_humidity_low;
 /** indicator humidity high [on, off] */

@@ -56,13 +56,121 @@ lv_obj_t* hmi_create_button_theme(lv_obj_t *parent, lv_coord_t x, lv_coord_t y) 
 	return button;
 }
 
+#define HMI_CONTROL_W 100
+#define HMI_CONTROL_H 200
+#define HMI_CONTROL_BAR_X 35
+#define HMI_CONTROL_BAR_Y 40
+#define HMI_CONTROL_BAR_W 10
+#define HMI_CONTROL_BAR_H 100
+
+static uint16_t hmi_get_control_value_y(hmi_control_t *target, int16_t value) {
+	uint16_t y = target->y;
+	uint16_t min = target->min;
+	uint16_t max = target->max;
+	float fraction = (float) (value - min) / (max - min);
+	return y + HMI_CONTROL_BAR_Y + HMI_CONTROL_BAR_H
+			- (fraction * HMI_CONTROL_BAR_H) - 10;
+}
+
+static void hmi_update_control(hmi_control_t *target, int16_t pv, int16_t sv,
+bool hi, bool lo) {
+
+	uint16_t x = target->x;
+	lv_obj_t *bar = target->bar;
+	lv_obj_t *label_sv = target->label_sv;
+	lv_obj_t *label_pv = target->label_pv;
+	lv_obj_t *label_lo = target->label_lo;
+	lv_obj_t *label_hi = target->label_hi;
+
+	// pv
+	uint16_t pv_y = hmi_get_control_value_y(target, pv);
+	lv_obj_set_pos(label_pv, x + HMI_CONTROL_BAR_X + 15, pv_y);
+	lv_label_set_text_fmt(label_pv, "=%2d", pv);
+	lv_bar_set_value(bar, pv, LV_ANIM_OFF);
+
+	// sv
+	uint16_t sv_y = hmi_get_control_value_y(target, sv);
+	lv_obj_set_pos(label_sv, x + HMI_CONTROL_BAR_X - 25, sv_y);
+	lv_label_set_text_fmt(label_sv, "%2d>", sv);
+
+	// lo
+	lv_obj_set_style_local_text_color(label_lo, LV_LABEL_PART_MAIN,
+			LV_STATE_DEFAULT, lo ? LV_COLOR_RED : LV_COLOR_GRAY);
+
+	// hi
+	lv_obj_set_style_local_text_color(label_hi, LV_LABEL_PART_MAIN,
+			LV_STATE_DEFAULT, hi ? LV_COLOR_RED : LV_COLOR_GRAY);
+}
+
+static void hmi_create_control(hmi_control_t *target, lv_obj_t *parent,
+		lv_coord_t x, lv_coord_t y, const char *name, int16_t min, int16_t max) {
+
+	target->x = x;
+	target->y = y;
+	target->min = min;
+	target->max = max;
+
+	lv_obj_t *control = lv_cont_create(parent, NULL);
+	lv_obj_set_pos(control, x, y);
+	lv_obj_set_size(control, HMI_CONTROL_W, HMI_CONTROL_H);
+
+	lv_obj_t *label_name = lv_label_create(control, NULL);
+	lv_obj_set_pos(label_name, x + 5, y + 2);
+	lv_label_set_text(label_name, name);
+
+	lv_obj_t *bar = lv_bar_create(control, NULL);
+	lv_obj_set_pos(bar, x + HMI_CONTROL_BAR_X, y + HMI_CONTROL_BAR_Y);
+	lv_obj_set_size(bar, HMI_CONTROL_BAR_W, HMI_CONTROL_BAR_H);
+	lv_bar_set_range(bar, min, max);
+	lv_bar_set_type(bar, LV_BAR_TYPE_NORMAL);
+	//lv_bar_set_value(bar, 0, LV_ANIM_OFF);
+	target->bar = bar;
+
+	lv_obj_t *label_hi = lv_label_create(control, NULL);
+	lv_obj_set_pos(label_hi, x + HMI_CONTROL_BAR_X - 2,
+			y + HMI_CONTROL_BAR_Y - 20);
+	lv_label_set_text(label_hi, "HI");
+	lv_obj_set_style_local_text_color(label_hi, LV_LABEL_PART_MAIN,
+			LV_STATE_DEFAULT, LV_COLOR_GRAY);
+	target->label_hi = label_hi;
+
+	lv_obj_t *label_lo = lv_label_create(control, NULL);
+	lv_obj_set_pos(label_lo, x + HMI_CONTROL_BAR_X - 3,
+			y + HMI_CONTROL_BAR_Y + HMI_CONTROL_BAR_H + 5);
+	lv_label_set_text(label_lo, "LO");
+	lv_obj_set_style_local_text_color(label_lo, LV_LABEL_PART_MAIN,
+			LV_STATE_DEFAULT, LV_COLOR_GRAY);
+	target->label_lo = label_lo;
+
+	lv_obj_t *label_max = lv_label_create(control, NULL);
+	uint16_t max_y = hmi_get_control_value_y(target, max);
+	lv_obj_set_pos(label_max, x + HMI_CONTROL_BAR_X + 15, max_y);
+	lv_label_set_text_fmt(label_max, "-%2d", max);
+
+	lv_obj_t *label_min = lv_label_create(control, NULL);
+	uint16_t min_y = hmi_get_control_value_y(target, min);
+	lv_obj_set_pos(label_min, x + HMI_CONTROL_BAR_X + 15, min_y);
+	lv_label_set_text_fmt(label_min, "-%2d", min);
+
+	lv_obj_t *label_pv = lv_label_create(control, NULL);
+	uint16_t pv_y = hmi_get_control_value_y(target, min);
+	lv_obj_set_pos(label_pv, x + HMI_CONTROL_BAR_X + 15, pv_y);
+	lv_label_set_text_fmt(label_pv, "=%2d", min);
+	target->label_pv = label_pv;
+
+	lv_obj_t *label_sv = lv_label_create(control, NULL);
+	uint16_t sv_y = hmi_get_control_value_y(target, min);
+	lv_obj_set_pos(label_sv, x + HMI_CONTROL_BAR_X - 25, sv_y);
+	lv_label_set_text_fmt(label_sv, "%2d>", min);
+	target->label_sv = label_sv;
+}
+
 static lv_obj_t* hmi_create_tab_control(lv_obj_t *parent) {
 
 	lv_obj_t *tab = lv_tabview_add_tab(parent, "Control");
 
-	lv_obj_t *label = lv_label_create(tab, NULL);
-	lv_label_set_text(label, "placeholder");
-
+	hmi_create_control(&hmi_control_temperature, tab, 10, 10, "Temp. [C]", 0, 50);
+	hmi_update_control(&hmi_control_temperature, 15, 45, false, true);
 	return tab;
 }
 
@@ -88,7 +196,7 @@ static lv_obj_t* hmi_create_spinbox(lv_obj_t *parent, lv_coord_t x,
 	lv_obj_set_pos(spinbox, x, y);
 	lv_obj_set_width(spinbox, w);
 	lv_textarea_set_text_align(spinbox, LV_LABEL_ALIGN_RIGHT);
-	// avoid see of blinking cursors
+// avoid see of blinking cursors
 	lv_textarea_set_cursor_blink_time(spinbox, 0);
 	lv_spinbox_set_digit_format(spinbox, digit_count, separator_position);
 	lv_spinbox_set_range(spinbox, range_min, range_max);
