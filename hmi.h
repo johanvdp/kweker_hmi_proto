@@ -12,10 +12,6 @@ extern "C" {
 #endif
 
 typedef struct {
-	uint16_t x;
-	uint16_t y;
-	uint16_t min;
-	uint16_t max;
 	lv_obj_t* bar;
 	lv_obj_t* label_sv;
 	lv_obj_t* label_pv;
@@ -57,28 +53,18 @@ static lv_obj_t *hmi_led_recirculation_switch;
 
 /** temperature control */
 static hmi_control_t hmi_control_temperature;
-/** current humidity [0..99.0 %RH]  */
-static lv_obj_t *hmi_label_current_humidity;
-/** current CO2 concentration [0..2000 ppm]  */
-static lv_obj_t *hmi_label_current_co2;
-/** setpoint humidity [0..99.0 %RH]  */
-static lv_obj_t *hmi_label_setpoint_humidity;
-/** setpoint CO2 concentration [0..2000 ppm]  */
-static lv_obj_t *hmi_label_setpoint_co2;
-/** indicator humidity low [on, off] */
-static lv_obj_t *hmi_led_control_humidity_low;
-/** indicator humidity high [on, off] */
-static lv_obj_t *hmi_led_control_humidity_high;
-/** indicator CO2 concentration low [on, off] */
-static lv_obj_t *hmi_led_control_co2_low;
-/** indicator CO2 concentration high [on, off] */
-static lv_obj_t *hmi_led_control_co2_high;
+/** humidity control */
+static hmi_control_t hmi_control_humidity;
+/** CO2 concentration control */
+static hmi_control_t hmi_control_co2;
+
 /** selector control mode off */
 static lv_obj_t *hmi_btn_control_mode_off;
 /** selector control mode manual */
 static lv_obj_t *hmi_btn_control_mode_manual;
 /** selector control mode automatic */
 static lv_obj_t *hmi_btn_control_mode_automatic;
+
 /** setpoint manual light switch */
 static lv_obj_t *hmi_btn_light_switch;
 /** setpoint manual heater switch */
