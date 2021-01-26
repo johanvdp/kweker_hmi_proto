@@ -17,6 +17,14 @@ static lv_obj_t *hmi_label_clock;
 static lv_obj_t *hmi_label_circadian;
 /** current control mode [off, manual, automatic] */
 static lv_obj_t *hmi_label_control_mode;
+/** tab page holder */
+static lv_obj_t *hmi_tabview;
+/** button navigate to tab control */
+static lv_obj_t *hmi_button_control;
+/** button navigate to tab settings */
+static lv_obj_t *hmi_button_settings;
+/** button navigate to tab about */
+static lv_obj_t *hmi_button_about;
 /** current light switch state [off, on] */
 static lv_obj_t *hmi_led_light_switch;
 /** current heater switch state [off, on] */
