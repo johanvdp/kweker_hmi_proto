@@ -3,6 +3,8 @@
 lv_obj_t* hmi_about_create_tab(lv_obj_t *parent) {
 
 	lv_obj_t *tab = lv_tabview_add_tab(parent, "About");
+	// disable manual sliding between tabs
+	lv_page_set_scroll_propagation(tab, false);
 
 	hmi_label_about = lv_label_create(tab, NULL);
 	lv_label_set_long_mode(hmi_label_about, LV_LABEL_LONG_BREAK);

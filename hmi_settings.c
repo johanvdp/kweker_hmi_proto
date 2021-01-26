@@ -119,6 +119,8 @@ lv_obj_t* hmi_settings_create_label(lv_obj_t *parent, lv_coord_t x, lv_coord_t y
 lv_obj_t* hmi_settings_create_tab(lv_obj_t *parent) {
 
 	lv_obj_t *tab = lv_tabview_add_tab(parent, "Settings");
+	// disable manual sliding between tabs
+	lv_page_set_scroll_propagation(tab, false);
 
 	/** set current time */
 	hmi_settings_create_label(tab, 10, 0 * HMI_SETTING_HEIGHT, "Current time:");
