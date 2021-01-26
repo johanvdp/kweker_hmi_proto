@@ -1,5 +1,7 @@
 #include "hmi_about.h"
 
+lv_obj_t *hmi_label_about;
+
 lv_obj_t* hmi_about_create_tab(lv_obj_t *parent) {
 
 	lv_obj_t *tab = lv_tabview_add_tab(parent, "About");

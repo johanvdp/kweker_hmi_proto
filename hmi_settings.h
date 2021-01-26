@@ -11,28 +11,28 @@
 lv_obj_t* hmi_settings_create_tab(lv_obj_t *parent);
 
 /** set current time hour */
-static lv_obj_t *hmi_spinbox_time_hour;
+extern lv_obj_t *hmi_spinbox_time_hour;
 /** set current time minute */
-static lv_obj_t *hmi_spinbox_time_minute;
+extern lv_obj_t *hmi_spinbox_time_minute;
 /** set begin of day time hour */
-static lv_obj_t *hmi_spinbox_begin_of_day_hour;
+extern lv_obj_t *hmi_spinbox_begin_of_day_hour;
 /** set begin of day time minute */
-static lv_obj_t *hmi_spinbox_begin_of_day_minute;
+extern lv_obj_t *hmi_spinbox_begin_of_day_minute;
 /** set begin of night time hour */
-static lv_obj_t *hmi_spinbox_begin_of_night_hour;
+extern lv_obj_t *hmi_spinbox_begin_of_night_hour;
 /** set begin of night time minute */
-static lv_obj_t *hmi_spinbox_begin_of_night_minute;
+extern lv_obj_t *hmi_spinbox_begin_of_night_minute;
 /** set day temperature */
-static lv_obj_t *hmi_spinbox_day_temperature;
+extern lv_obj_t *hmi_spinbox_day_temperature;
 /** set day humidity */
-static lv_obj_t *hmi_spinbox_day_humidity;
+extern lv_obj_t *hmi_spinbox_day_humidity;
 /** set day CO2 concentration */
-static lv_obj_t *hmi_spinbox_day_co2;
+extern lv_obj_t *hmi_spinbox_day_co2;
 /** set night temperature */
-static lv_obj_t *hmi_spinbox_night_temperature;
+extern lv_obj_t *hmi_spinbox_night_temperature;
 /** set night humidity */
-static lv_obj_t *hmi_spinbox_night_humidity;
+extern lv_obj_t *hmi_spinbox_night_humidity;
 /** set night CO2 concentration */
-static lv_obj_t *hmi_spinbox_night_co2;
+extern lv_obj_t *hmi_spinbox_night_co2;
 
 #endif /* _HMI_SETTINGS_H_ */

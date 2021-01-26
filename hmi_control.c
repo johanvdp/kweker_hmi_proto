@@ -5,6 +5,29 @@
 #define HMI_CONTROL_BAR_W 10
 #define HMI_CONTROL_BAR_H 100
 
+/** temperature control */
+hmi_control_t hmi_control_temperature;
+/** humidity control */
+hmi_control_t hmi_control_humidity;
+/** CO2 concentration control */
+hmi_control_t hmi_control_co2;
+
+/** selector control mode off */
+lv_obj_t *hmi_btn_control_mode_off;
+/** selector control mode manual */
+lv_obj_t *hmi_btn_control_mode_manual;
+/** selector control mode automatic */
+lv_obj_t *hmi_btn_control_mode_automatic;
+
+/** setpoint manual light switch */
+lv_obj_t *hmi_btn_light_switch;
+/** setpoint manual heater switch */
+lv_obj_t *hmi_btn_heater_switch;
+/** setpoint manual exhaust fan switch */
+lv_obj_t *hmi_btn_exhaust_switch;
+/** setpoint manual recirculation fan switch */
+lv_obj_t *hmi_btn_recirculation_switch;
+
 uint16_t hmi_control_get_y(lv_obj_t *bar, int16_t value) {
 	uint16_t min = lv_bar_get_min_value(bar);
 	uint16_t max = lv_bar_get_max_value(bar);

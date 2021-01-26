@@ -20,26 +20,26 @@ typedef struct {
 lv_obj_t* hmi_control_create_tab(lv_obj_t *parent);
 
 /** temperature control */
-static hmi_control_t hmi_control_temperature;
+extern hmi_control_t hmi_control_temperature;
 /** humidity control */
-static hmi_control_t hmi_control_humidity;
+extern hmi_control_t hmi_control_humidity;
 /** CO2 concentration control */
-static hmi_control_t hmi_control_co2;
+extern hmi_control_t hmi_control_co2;
 
 /** selector control mode off */
-static lv_obj_t *hmi_btn_control_mode_off;
+extern lv_obj_t *hmi_btn_control_mode_off;
 /** selector control mode manual */
-static lv_obj_t *hmi_btn_control_mode_manual;
+extern lv_obj_t *hmi_btn_control_mode_manual;
 /** selector control mode automatic */
-static lv_obj_t *hmi_btn_control_mode_automatic;
+extern lv_obj_t *hmi_btn_control_mode_automatic;
 
 /** setpoint manual light switch */
-static lv_obj_t *hmi_btn_light_switch;
+extern lv_obj_t *hmi_btn_light_switch;
 /** setpoint manual heater switch */
-static lv_obj_t *hmi_btn_heater_switch;
+extern lv_obj_t *hmi_btn_heater_switch;
 /** setpoint manual exhaust fan switch */
-static lv_obj_t *hmi_btn_exhaust_switch;
+extern lv_obj_t *hmi_btn_exhaust_switch;
 /** setpoint manual recirculation fan switch */
-static lv_obj_t *hmi_btn_recirculation_switch;
+extern lv_obj_t *hmi_btn_recirculation_switch;
 
 #endif /* _HMI_CONTROL_H_ */

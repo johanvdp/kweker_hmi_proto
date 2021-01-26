@@ -11,6 +11,6 @@
 lv_obj_t* hmi_about_create_tab(lv_obj_t *parent);
 
 /** about page content */
-static lv_obj_t *hmi_label_about;
+extern lv_obj_t *hmi_label_about;
 
 #endif /* _HMI_ABOUT_H_ */

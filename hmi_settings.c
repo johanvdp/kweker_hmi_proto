@@ -3,6 +3,31 @@
 #define HMI_SETTING_HEIGHT (LV_DPI / 4)
 #define HMI_SETTING_WIDTH 60
 
+/** set current time hour */
+lv_obj_t *hmi_spinbox_time_hour;
+/** set current time minute */
+lv_obj_t *hmi_spinbox_time_minute;
+/** set begin of day time hour */
+lv_obj_t *hmi_spinbox_begin_of_day_hour;
+/** set begin of day time minute */
+lv_obj_t *hmi_spinbox_begin_of_day_minute;
+/** set begin of night time hour */
+lv_obj_t *hmi_spinbox_begin_of_night_hour;
+/** set begin of night time minute */
+lv_obj_t *hmi_spinbox_begin_of_night_minute;
+/** set day temperature */
+lv_obj_t *hmi_spinbox_day_temperature;
+/** set day humidity */
+lv_obj_t *hmi_spinbox_day_humidity;
+/** set day CO2 concentration */
+lv_obj_t *hmi_spinbox_day_co2;
+/** set night temperature */
+lv_obj_t *hmi_spinbox_night_temperature;
+/** set night humidity */
+lv_obj_t *hmi_spinbox_night_humidity;
+/** set night CO2 concentration */
+lv_obj_t *hmi_spinbox_night_co2;
+
 void hmi_settings_button_theme_cb(lv_obj_t *button, lv_event_t e) {
 	if (e == LV_EVENT_VALUE_CHANGED) {
 		uint32_t flag = LV_THEME_MATERIAL_FLAG_LIGHT;
