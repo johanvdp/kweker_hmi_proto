@@ -35,33 +35,34 @@ void hmi_toolbar_button_event_cb(lv_obj_t *button, lv_event_t e) {
 				lv_btn_set_state(hmi_button_control, LV_STATE_CHECKED);
 				lv_btn_set_state(hmi_button_settings, LV_STATE_DEFAULT);
 				lv_btn_set_state(hmi_button_about, LV_STATE_DEFAULT);
-				lv_tabview_set_tab_act(hmi_tabview, 0, LV_ANIM_ON);
+				lv_tabview_set_tab_act(hmi_tabview, 0, LV_ANIM_OFF);
 
 			} else if (button == hmi_button_settings) {
 				lv_btn_set_state(hmi_button_control, LV_STATE_DEFAULT);
 				lv_btn_set_state(hmi_button_settings, LV_STATE_CHECKED);
 				lv_btn_set_state(hmi_button_about, LV_STATE_DEFAULT);
-				lv_tabview_set_tab_act(hmi_tabview, 1, LV_ANIM_ON);
+				lv_tabview_set_tab_act(hmi_tabview, 1, LV_ANIM_OFF);
 
 			} else if (button == hmi_button_about) {
 				lv_btn_set_state(hmi_button_control, LV_STATE_DEFAULT);
 				lv_btn_set_state(hmi_button_settings, LV_STATE_DEFAULT);
 				lv_btn_set_state(hmi_button_about, LV_STATE_CHECKED);
-				lv_tabview_set_tab_act(hmi_tabview, 2, LV_ANIM_ON);
+				lv_tabview_set_tab_act(hmi_tabview, 2, LV_ANIM_OFF);
 			}
 		}
 	}
 }
 
-lv_obj_t* hmi_create_toolbar_button(lv_obj_t *parent, uint16_t x, uint16_t y, const char* text) {
+lv_obj_t* hmi_create_toolbar_button(lv_obj_t *parent, uint16_t x, uint16_t y,
+		const char *text) {
 	lv_obj_t *button = lv_btn_create(parent, NULL);
 	lv_obj_set_pos(button, x, y);
 	lv_obj_set_size(button, HMI_BUTTON_WIDTH, HMI_BUTTON_HEIGHT);
 	lv_btn_set_checkable(button, true);
-    lv_obj_set_event_cb(button, hmi_toolbar_button_event_cb);
+	lv_obj_set_event_cb(button, hmi_toolbar_button_event_cb);
 	lv_obj_t *label = lv_label_create(button, NULL);
-    lv_label_set_text(label, text);
-    return button;
+	lv_label_set_text(label, text);
+	return button;
 }
 
 lv_obj_t* hmi_create_toolbar(lv_obj_t *parent) {
@@ -76,9 +77,12 @@ lv_obj_t* hmi_create_toolbar(lv_obj_t *parent) {
 	hmi_label_control_mode = hmi_create_label(toolbar, LV_DPX(60), LV_DPX(22),
 			"OFF");
 
-	hmi_button_control = hmi_create_toolbar_button(toolbar, LV_DPX(130), LV_DPX(2), "Control");
-	hmi_button_settings = hmi_create_toolbar_button(toolbar, LV_DPX(230), LV_DPX(2), "Settings");
-	hmi_button_about = hmi_create_toolbar_button(toolbar, LV_DPX(330), LV_DPX(2), "About");
+	hmi_button_control = hmi_create_toolbar_button(toolbar, LV_DPX(130),
+			LV_DPX(2), "Control");
+	hmi_button_settings = hmi_create_toolbar_button(toolbar, LV_DPX(230),
+			LV_DPX(2), "Settings");
+	hmi_button_about = hmi_create_toolbar_button(toolbar, LV_DPX(330),
+			LV_DPX(2), "About");
 	lv_btn_set_state(hmi_button_control, LV_STATE_CHECKED);
 
 	hmi_led_light_switch = hmi_create_led(toolbar,
@@ -100,10 +104,11 @@ lv_obj_t* hmi_create_tabview(lv_obj_t *parent, uint16_t toolbar_height) {
 	lv_obj_t *tabview = lv_tabview_create(parent, NULL);
 	lv_obj_clean_style_list(tabview, LV_TABVIEW_PART_TAB_BG);
 	lv_tabview_set_btns_pos(tabview, LV_TABVIEW_TAB_POS_NONE);
+
 	// remove excessive whitespace
-    lv_obj_set_style_local_pad_top(tabview, LV_TABVIEW_PART_TAB_BG,
+	lv_obj_set_style_local_pad_top(tabview, LV_TABVIEW_PART_TAB_BG,
 			LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_pad_bottom(tabview, LV_TABVIEW_PART_TAB_BG,
+	lv_obj_set_style_local_pad_bottom(tabview, LV_TABVIEW_PART_TAB_BG,
 			LV_STATE_DEFAULT, 0);
 
 	lv_obj_set_style_local_pad_top(tabview, LV_TABVIEW_PART_TAB_BTN,

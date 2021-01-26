@@ -53,6 +53,8 @@ void hmi_control_create_control(hmi_control_t *target, lv_obj_t *parent,
 	lv_obj_t *control = lv_cont_create(parent, NULL);
 	lv_obj_set_pos(control, x, y);
 	lv_obj_set_size(control, HMI_CONTROL_W, HMI_CONTROL_H);
+	// nothing to select or edit
+	lv_obj_clean_style_list(control, LV_OBJ_PART_MAIN);
 
 	lv_obj_t *bar = lv_bar_create(control, NULL);
 	lv_obj_set_size(bar, HMI_CONTROL_BAR_W, HMI_CONTROL_BAR_H);
@@ -108,6 +110,8 @@ void hmi_control_create_control(hmi_control_t *target, lv_obj_t *parent,
 lv_obj_t* hmi_control_create_tab(lv_obj_t *parent) {
 
 	lv_obj_t *tab = lv_tabview_add_tab(parent, "Control");
+	// disable manual sliding between tabs
+	lv_page_set_scroll_propagation(tab, false);
 
 	hmi_control_create_control(&hmi_control_temperature, tab, 1, 1,
 			"Temperature [°C]", 0, 50);
