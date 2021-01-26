@@ -32,7 +32,7 @@ lv_obj_t *hmi_led_exhaust_switch;
 /** current recirculation fan switch state [off, on] */
 lv_obj_t *hmi_led_recirculation_switch;
 
-lv_obj_t* hmi_create_led(lv_obj_t *parent, lv_coord_t x, lv_coord_t y,
+static lv_obj_t* hmi_create_led(lv_obj_t *parent, lv_coord_t x, lv_coord_t y,
 		const char *text) {
 	lv_obj_t *led = lv_led_create(parent, NULL);
 	lv_obj_set_size(led, HMI_LED_WIDTH, HMI_LED_HEIGHT);
@@ -43,7 +43,7 @@ lv_obj_t* hmi_create_led(lv_obj_t *parent, lv_coord_t x, lv_coord_t y,
 	return led;
 }
 
-lv_obj_t* hmi_create_label(lv_obj_t *parent, uint16_t x, uint16_t y,
+static lv_obj_t* hmi_create_label(lv_obj_t *parent, uint16_t x, uint16_t y,
 		const char *text) {
 	lv_obj_t *label = lv_label_create(parent, NULL);
 	lv_label_set_text(label, text);
@@ -51,7 +51,7 @@ lv_obj_t* hmi_create_label(lv_obj_t *parent, uint16_t x, uint16_t y,
 	return label;
 }
 
-void hmi_toolbar_button_event_cb(lv_obj_t *button, lv_event_t e) {
+static void hmi_toolbar_button_event_cb(lv_obj_t *button, lv_event_t e) {
 	if (e == LV_EVENT_CLICKED) {
 		if (lv_btn_get_state(button) == LV_BTN_STATE_CHECKED_RELEASED) {
 			if (button == hmi_button_control) {
@@ -76,7 +76,7 @@ void hmi_toolbar_button_event_cb(lv_obj_t *button, lv_event_t e) {
 	}
 }
 
-lv_obj_t* hmi_create_toolbar_button(lv_obj_t *parent, uint16_t x, uint16_t y,
+static lv_obj_t* hmi_create_toolbar_button(lv_obj_t *parent, uint16_t x, uint16_t y,
 		const char *text) {
 	lv_obj_t *button = lv_btn_create(parent, NULL);
 	lv_obj_set_pos(button, x, y);
@@ -88,9 +88,9 @@ lv_obj_t* hmi_create_toolbar_button(lv_obj_t *parent, uint16_t x, uint16_t y,
 	return button;
 }
 
-lv_obj_t* hmi_create_toolbar(lv_obj_t *parent) {
+static lv_obj_t* hmi_create_toolbar(lv_obj_t *parent) {
 	lv_obj_t *toolbar = lv_obj_create(parent, NULL);
-	lv_obj_clean_style_list(toolbar, LV_OBJ_PART_MAIN);
+	//lv_obj_clean_style_list(toolbar, LV_OBJ_PART_MAIN);
 	lv_obj_set_size(toolbar, LV_HOR_RES, HMI_TOOLBAR_HEIGHT);
 
 	hmi_label_clock = hmi_create_label(toolbar, LV_DPX(10), LV_DPX(10),
@@ -123,9 +123,9 @@ lv_obj_t* hmi_create_toolbar(lv_obj_t *parent) {
 	return toolbar;
 }
 
-lv_obj_t* hmi_create_tabview(lv_obj_t *parent, uint16_t toolbar_height) {
+static lv_obj_t* hmi_create_tabview(lv_obj_t *parent, uint16_t toolbar_height) {
 	lv_obj_t *tabview = lv_tabview_create(parent, NULL);
-	lv_obj_clean_style_list(tabview, LV_TABVIEW_PART_TAB_BG);
+	//lv_obj_clean_style_list(tabview, LV_TABVIEW_PART_TAB_BG);
 	lv_tabview_set_btns_pos(tabview, LV_TABVIEW_TAB_POS_NONE);
 
 	// remove excessive whitespace

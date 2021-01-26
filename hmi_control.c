@@ -1,9 +1,8 @@
 #include "hmi_control.h"
 
-#define HMI_CONTROL_W 120
-#define HMI_CONTROL_H 180
+#define HMI_CONTROL_W 110
+#define HMI_CONTROL_H 270
 #define HMI_CONTROL_BAR_W 10
-#define HMI_CONTROL_BAR_H 100
 
 /** temperature control */
 hmi_control_t hmi_control_temperature;
@@ -12,23 +11,12 @@ hmi_control_t hmi_control_humidity;
 /** CO2 concentration control */
 hmi_control_t hmi_control_co2;
 
-/** selector control mode off */
-lv_obj_t *hmi_btn_control_mode_off;
-/** selector control mode manual */
-lv_obj_t *hmi_btn_control_mode_manual;
-/** selector control mode automatic */
-lv_obj_t *hmi_btn_control_mode_automatic;
+/** selector control mode */
+lv_obj_t *hmi_control_mode_btnmatrix;
+/** setpoint manual control */
+lv_obj_t *hmi_control_manual_btnmatrix;
 
-/** setpoint manual light switch */
-lv_obj_t *hmi_btn_light_switch;
-/** setpoint manual heater switch */
-lv_obj_t *hmi_btn_heater_switch;
-/** setpoint manual exhaust fan switch */
-lv_obj_t *hmi_btn_exhaust_switch;
-/** setpoint manual recirculation fan switch */
-lv_obj_t *hmi_btn_recirculation_switch;
-
-uint16_t hmi_control_get_y(lv_obj_t *bar, int16_t value) {
+static uint16_t hmi_control_get_y(lv_obj_t *bar, int16_t value) {
 	uint16_t min = lv_bar_get_min_value(bar);
 	uint16_t max = lv_bar_get_max_value(bar);
 	uint16_t y = lv_obj_get_y(bar);
@@ -38,7 +26,7 @@ uint16_t hmi_control_get_y(lv_obj_t *bar, int16_t value) {
 	return y + height - (fraction * height) - 10;
 }
 
-void hmi_control_update(hmi_control_t *target, int16_t pv, int16_t sv,
+static void hmi_control_update(hmi_control_t *target, int16_t pv, int16_t sv,
 bool hi, bool lo) {
 	lv_obj_t *bar = target->bar;
 	lv_obj_t *label_sv = target->label_sv;
@@ -70,41 +58,46 @@ bool hi, bool lo) {
 			LV_STATE_DEFAULT, hi ? LV_COLOR_RED : LV_COLOR_GRAY);
 }
 
-void hmi_control_create_control(hmi_control_t *target, lv_obj_t *parent,
+static void hmi_control_create_control(hmi_control_t *target, lv_obj_t *parent,
 		lv_coord_t x, lv_coord_t y, const char *name, int16_t min, int16_t max) {
 
 	lv_obj_t *control = lv_cont_create(parent, NULL);
+	lv_obj_clean_style_list(control, LV_CONT_PART_MAIN);
 	lv_obj_set_pos(control, x, y);
 	lv_obj_set_size(control, HMI_CONTROL_W, HMI_CONTROL_H);
-	// nothing to select or edit
-	lv_obj_clean_style_list(control, LV_OBJ_PART_MAIN);
 
-	lv_obj_t *bar = lv_bar_create(control, NULL);
-	lv_obj_set_size(bar, HMI_CONTROL_BAR_W, HMI_CONTROL_BAR_H);
-	lv_bar_set_range(bar, min, max);
-	lv_bar_set_type(bar, LV_BAR_TYPE_NORMAL);
-	lv_obj_align(bar, control, LV_ALIGN_CENTER, 0, 0);
-	target->bar = bar;
-	uint16_t bar_x = lv_obj_get_x(bar);
-	uint16_t bar_width = lv_obj_get_width(bar);
+	lv_obj_t *label_name = lv_label_create(control, NULL);
+	lv_label_set_text(label_name, name);
+	lv_obj_align(label_name, control, LV_ALIGN_IN_TOP_MID, 0, 0);
 
 	lv_obj_t *label_hi = lv_label_create(control, NULL);
 	lv_label_set_text(label_hi, "HI");
 	lv_obj_set_style_local_text_color(label_hi, LV_LABEL_PART_MAIN,
 			LV_STATE_DEFAULT, LV_COLOR_GRAY);
-	lv_obj_align(label_hi, bar, LV_ALIGN_OUT_TOP_MID, 0, 0);
+	lv_obj_align(label_hi, label_name, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
 	target->label_hi = label_hi;
-
-	lv_obj_t *label_name = lv_label_create(control, NULL);
-	lv_label_set_text(label_name, name);
-	lv_obj_align(label_name, label_hi, LV_ALIGN_OUT_TOP_MID, 0, 0);
 
 	lv_obj_t *label_lo = lv_label_create(control, NULL);
 	lv_label_set_text(label_lo, "LO");
 	lv_obj_set_style_local_text_color(label_lo, LV_LABEL_PART_MAIN,
 			LV_STATE_DEFAULT, LV_COLOR_GRAY);
-	lv_obj_align(label_lo, bar, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+	lv_obj_align(label_lo, control, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
 	target->label_lo = label_lo;
+
+	lv_obj_t *bar = lv_bar_create(control, NULL);
+	lv_area_t label_hi_coords;
+	lv_obj_get_coords(label_hi, &label_hi_coords);
+	lv_area_t label_lo_coords;
+	lv_obj_get_coords(label_lo, &label_lo_coords);
+	lv_obj_set_size(bar, HMI_CONTROL_BAR_W,
+			label_lo_coords.y1 - label_hi_coords.y2);
+	lv_bar_set_range(bar, min, max);
+	lv_bar_set_type(bar, LV_BAR_TYPE_NORMAL);
+	lv_obj_align(bar, label_hi, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+	lv_obj_align(bar, label_lo, LV_ALIGN_OUT_TOP_MID, 0, 0);
+	target->bar = bar;
+	uint16_t bar_x = lv_obj_get_x(bar);
+	uint16_t bar_width = lv_obj_get_width(bar);
 
 	lv_obj_t *label_max = lv_label_create(control, NULL);
 	lv_label_set_text_fmt(label_max, "-%2d", max);
@@ -130,23 +123,99 @@ void hmi_control_create_control(hmi_control_t *target, lv_obj_t *parent,
 	target->label_sv = label_sv;
 }
 
+static const char *hmi_control_mode_map[] = { "Off", "\n", "Manual", "\n",
+		"Auto", "" };
+
+static lv_obj_t* hmi_control_create_mode(lv_obj_t *parent, lv_coord_t x,
+		lv_coord_t y, lv_coord_t w, lv_coord_t h) {
+
+	lv_obj_t *cont = lv_cont_create(parent, NULL);
+	lv_obj_clean_style_list(cont, LV_CONT_PART_MAIN);
+	lv_obj_set_pos(cont, x, y);
+	lv_obj_set_size(cont, w, h);
+
+	lv_obj_t *label = lv_label_create(cont, NULL);
+	lv_label_set_text(label, "Control");
+	lv_obj_align(label, cont, LV_ALIGN_IN_TOP_MID, 0, 0);
+
+	lv_obj_t *matrix = lv_btnmatrix_create(cont, NULL);
+	lv_obj_clean_style_list(matrix, LV_BTNMATRIX_PART_BG);
+
+	lv_btnmatrix_set_map(matrix, hmi_control_mode_map);
+	lv_btnmatrix_set_one_check(matrix, true);
+	lv_btnmatrix_set_btn_ctrl(matrix, 0, LV_BTNMATRIX_CTRL_CHECKABLE);
+	lv_btnmatrix_set_btn_ctrl(matrix, 1, LV_BTNMATRIX_CTRL_CHECKABLE);
+	lv_btnmatrix_set_btn_ctrl(matrix, 2, LV_BTNMATRIX_CTRL_CHECKABLE);
+	lv_btnmatrix_set_btn_ctrl(matrix, 0, LV_BTNMATRIX_CTRL_CHECK_STATE);
+
+	// use remaining size
+	lv_area_t label_coords;
+	lv_obj_get_coords(label, &label_coords);
+	lv_area_t cont_coords;
+	lv_obj_get_coords(cont, &cont_coords);
+	lv_obj_set_size(matrix, cont_coords.x2 - cont_coords.x1 - 4, cont_coords.y2 - label_coords.y2 - 4);
+	lv_obj_align(matrix, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+	return matrix;
+}
+
+static const char *hmi_control_manual_map[] = { "Light", "\n", "Heater", "\n",
+		"Exhaust", "\n", "Recirc.", "" };
+
+static lv_obj_t* hmi_control_create_manual(lv_obj_t *parent, lv_coord_t x,
+		lv_coord_t y, lv_coord_t w, lv_coord_t h) {
+
+	lv_obj_t *cont = lv_cont_create(parent, NULL);
+	lv_obj_set_pos(cont, x, y);
+	lv_obj_set_size(cont, w, h);
+	lv_obj_clean_style_list(cont, LV_CONT_PART_MAIN);
+
+	lv_obj_t *label = lv_label_create(cont, NULL);
+	lv_label_set_text(label, "Manual");
+	lv_obj_align(label, cont, LV_ALIGN_IN_TOP_MID, 0, 0);
+
+	lv_obj_t *matrix = lv_btnmatrix_create(cont, NULL);
+	lv_obj_clean_style_list(matrix, LV_BTNMATRIX_PART_BG);
+
+	lv_btnmatrix_set_map(matrix, hmi_control_manual_map);
+	lv_btnmatrix_set_one_check(matrix, false);
+	lv_btnmatrix_set_btn_ctrl(matrix, 0, LV_BTNMATRIX_CTRL_CHECKABLE);
+	lv_btnmatrix_set_btn_ctrl(matrix, 1, LV_BTNMATRIX_CTRL_CHECKABLE);
+	lv_btnmatrix_set_btn_ctrl(matrix, 2, LV_BTNMATRIX_CTRL_CHECKABLE);
+	lv_btnmatrix_set_btn_ctrl(matrix, 3, LV_BTNMATRIX_CTRL_CHECKABLE);
+
+	// use remaining size
+	lv_area_t label_coords;
+	lv_obj_get_coords(label, &label_coords);
+	lv_area_t cont_coords;
+	lv_obj_get_coords(cont, &cont_coords);
+	lv_obj_set_size(matrix, cont_coords.x2 - cont_coords.x1 - 4, cont_coords.y2 - label_coords.y2 - 4);
+	lv_obj_align(matrix, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+	return matrix;
+}
+
 lv_obj_t* hmi_control_create_tab(lv_obj_t *parent) {
 
 	lv_obj_t *tab = lv_tabview_add_tab(parent, "Control");
 	// disable manual sliding between tabs
 	lv_page_set_scroll_propagation(tab, false);
 
-	hmi_control_create_control(&hmi_control_temperature, tab, 1, 1,
+	hmi_control_create_control(&hmi_control_temperature, tab, 5, 5,
 			"Temperature [°C]", 0, 50);
 	hmi_control_update(&hmi_control_temperature, 26, 30, false, true);
 
-	hmi_control_create_control(&hmi_control_humidity, tab, 1 + HMI_CONTROL_W, 1,
+	hmi_control_create_control(&hmi_control_humidity, tab, 5 + HMI_CONTROL_W, 5,
 			"Humidity [%RH]", 0, 100);
 	hmi_control_update(&hmi_control_humidity, 46, 40, true, false);
 
-	hmi_control_create_control(&hmi_control_co2, tab, 1 + HMI_CONTROL_W * 2, 1,
+	hmi_control_create_control(&hmi_control_co2, tab, (5 + HMI_CONTROL_W) * 2, 5,
 			"CO2 conc. [ppm]", 0, 2000);
 	hmi_control_update(&hmi_control_co2, 415, 800, false, true);
+
+	hmi_control_mode_btnmatrix = hmi_control_create_mode(tab,
+			(5 + HMI_CONTROL_W) * 3, 5, 110, 100);
+
+	hmi_control_manual_btnmatrix = hmi_control_create_manual(tab,
+			(5 + HMI_CONTROL_W) * 3, 125, 110, 140);
 
 	return tab;
 }

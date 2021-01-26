@@ -28,7 +28,7 @@ lv_obj_t *hmi_spinbox_night_humidity;
 /** set night CO2 concentration */
 lv_obj_t *hmi_spinbox_night_co2;
 
-void hmi_settings_button_theme_cb(lv_obj_t *button, lv_event_t e) {
+static void hmi_settings_button_theme_cb(lv_obj_t *button, lv_event_t e) {
 	if (e == LV_EVENT_VALUE_CHANGED) {
 		uint32_t flag = LV_THEME_MATERIAL_FLAG_LIGHT;
 		if (lv_btn_get_state(button) == LV_BTN_STATE_CHECKED_RELEASED)
@@ -41,7 +41,7 @@ void hmi_settings_button_theme_cb(lv_obj_t *button, lv_event_t e) {
 	}
 }
 
-lv_obj_t* hmi_settings_create_button_theme(lv_obj_t *parent, lv_coord_t x, lv_coord_t y) {
+static lv_obj_t* hmi_settings_create_button_theme(lv_obj_t *parent, lv_coord_t x, lv_coord_t y) {
 	lv_obj_t *button = lv_btn_create(parent, NULL);
 	lv_obj_set_pos(button, x, y);
 	lv_obj_set_size(button, HMI_SETTING_WIDTH, HMI_SETTING_HEIGHT);
@@ -58,21 +58,21 @@ lv_obj_t* hmi_settings_create_button_theme(lv_obj_t *parent, lv_coord_t x, lv_co
 	return button;
 }
 
-void hmi_settings_spinbox_increment_event_cb(lv_obj_t *btn, lv_event_t e) {
+static void hmi_settings_spinbox_increment_event_cb(lv_obj_t *btn, lv_event_t e) {
 	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
 		lv_obj_t *spinbox = (lv_obj_t*) btn->user_data;
 		lv_spinbox_increment(spinbox);
 	}
 }
 
-void hmi_settings_spinbox_decrement_event_cb(lv_obj_t *btn, lv_event_t e) {
+static void hmi_settings_spinbox_decrement_event_cb(lv_obj_t *btn, lv_event_t e) {
 	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
 		lv_obj_t *spinbox = (lv_obj_t*) btn->user_data;
 		lv_spinbox_decrement(spinbox);
 	}
 }
 
-lv_obj_t* hmi_settings_create_spinbox(lv_obj_t *parent, lv_coord_t x,
+static lv_obj_t* hmi_settings_create_spinbox(lv_obj_t *parent, lv_coord_t x,
 		lv_coord_t y, lv_coord_t w, uint8_t digit_count,
 		uint8_t separator_position, int32_t range_min, int32_t range_max,
 		uint32_t step) {
@@ -108,32 +108,32 @@ lv_obj_t* hmi_settings_create_spinbox(lv_obj_t *parent, lv_coord_t x,
 	return spinbox;
 }
 
-lv_obj_t* hmi_settings_create_spinbox_hour(lv_obj_t *parent, lv_coord_t x,
+static lv_obj_t* hmi_settings_create_spinbox_hour(lv_obj_t *parent, lv_coord_t x,
 		lv_coord_t y) {
 	return hmi_settings_create_spinbox(parent, x, y, HMI_SETTING_WIDTH, 2, 0, 0, 23, 1);
 }
 
-lv_obj_t* hmi_settings_create_spinbox_minute(lv_obj_t *parent, lv_coord_t x,
+static lv_obj_t* hmi_settings_create_spinbox_minute(lv_obj_t *parent, lv_coord_t x,
 		lv_coord_t y) {
 	return hmi_settings_create_spinbox(parent, x, y, HMI_SETTING_WIDTH, 2, 0, 0, 59, 1);
 }
 
-lv_obj_t* hmi_settings_create_spinbox_temperature(lv_obj_t *parent, lv_coord_t x,
+static lv_obj_t* hmi_settings_create_spinbox_temperature(lv_obj_t *parent, lv_coord_t x,
 		lv_coord_t y) {
 	return hmi_settings_create_spinbox(parent, x, y, HMI_SETTING_WIDTH, 3, 2, 0, 500, 1);
 }
 
-lv_obj_t* hmi_settings_create_spinbox_humidity(lv_obj_t *parent, lv_coord_t x,
+static lv_obj_t* hmi_settings_create_spinbox_humidity(lv_obj_t *parent, lv_coord_t x,
 		lv_coord_t y) {
 	return hmi_settings_create_spinbox(parent, x, y, HMI_SETTING_WIDTH, 3, 2, 0, 999, 1);
 }
 
-lv_obj_t* hmi_settings_create_spinbox_co2(lv_obj_t *parent, lv_coord_t x,
+static lv_obj_t* hmi_settings_create_spinbox_co2(lv_obj_t *parent, lv_coord_t x,
 		lv_coord_t y) {
 	return hmi_settings_create_spinbox(parent, x, y, HMI_SETTING_WIDTH, 4, 0, 0, 5000, 1);
 }
 
-lv_obj_t* hmi_settings_create_label(lv_obj_t *parent, lv_coord_t x, lv_coord_t y,
+static lv_obj_t* hmi_settings_create_label(lv_obj_t *parent, lv_coord_t x, lv_coord_t y,
 		const char *text) {
 	lv_obj_t *label = lv_label_create(parent, NULL);
 	lv_obj_set_pos(label, x, y + 10);
