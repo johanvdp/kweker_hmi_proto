@@ -9,31 +9,21 @@ lv_obj_t* hmi_about_create_tab(lv_obj_t *parent) {
 	lv_obj_set_size(hmi_label_about, lv_page_get_scrl_width(tab) - 20,
 			lv_obj_get_height(tab));
 	lv_label_set_text(hmi_label_about,
-			"PRODUCT DESCRIPTION\n"
-					"===================\n"
-					"Contrary to popular belief, Lorem Ipsum is not simply random text. "
-					"It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
-					"Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. "
-					"Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. "
-					"This book is a treatise on the theory of ethics, very popular during the Renaissance. "
-					"The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32. "
-					"It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
-					"The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. "
-					"Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. "
+			"LICENSE\n"
+					"\n"
+					"KWEKER - As useful as windshield wipers on a goat's ass.\n"
+					"The Unlicense\n"
+					"This is free and unencumbered software released into the public domain.\n"
 					"\n"
 					"\n"
 					"3RD PARTY LICENSES\n"
-					"==================\n"
-					"Contrary to popular belief, Lorem Ipsum is not simply random text. "
-					"It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
-					"Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. "
-					"Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. "
-					"This book is a treatise on the theory of ethics, very popular during the Renaissance. "
-					"The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32. "
-					"It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
-					"The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. "
-					"Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. "
-					"Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).");
+					"\n"
+					"LVGL - Light and Versatile Graphics Library\n"
+					"MIT licence\n"
+					"Copyright (c) 2020 LVGL LLC\n"
+					"Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n"
+					"The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n"
+					"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n");
 	return tab;
 }
 
