@@ -17,12 +17,8 @@ lv_obj_t *hmi_label_circadian;
 lv_obj_t *hmi_label_control_mode;
 /** tab page holder */
 lv_obj_t *hmi_tabview;
-/** button navigate to tab control */
-lv_obj_t *hmi_button_control;
-/** button navigate to tab settings */
-lv_obj_t *hmi_button_settings;
-/** button navigate to tab about */
-lv_obj_t *hmi_button_about;
+/** navigation buttons */
+lv_obj_t *hmi_btnmatrix_tabview;
 /** current light switch state [off, on] */
 lv_obj_t *hmi_led_light_switch;
 /** current heater switch state [off, on] */
@@ -51,46 +47,38 @@ static lv_obj_t* hmi_create_label(lv_obj_t *parent, uint16_t x, uint16_t y,
 	return label;
 }
 
-static void hmi_toolbar_button_event_cb(lv_obj_t *button, lv_event_t e) {
+static void hmi_navigation_event_cb(lv_obj_t *button, lv_event_t e) {
 	if (e == LV_EVENT_CLICKED) {
-		if (lv_btn_get_state(button) == LV_BTN_STATE_CHECKED_RELEASED) {
-			if (button == hmi_button_control) {
-				lv_btn_set_state(hmi_button_control, LV_STATE_CHECKED);
-				lv_btn_set_state(hmi_button_settings, LV_STATE_DEFAULT);
-				lv_btn_set_state(hmi_button_about, LV_STATE_DEFAULT);
-				lv_tabview_set_tab_act(hmi_tabview, 0, LV_ANIM_OFF);
-
-			} else if (button == hmi_button_settings) {
-				lv_btn_set_state(hmi_button_control, LV_STATE_DEFAULT);
-				lv_btn_set_state(hmi_button_settings, LV_STATE_CHECKED);
-				lv_btn_set_state(hmi_button_about, LV_STATE_DEFAULT);
-				lv_tabview_set_tab_act(hmi_tabview, 1, LV_ANIM_OFF);
-
-			} else if (button == hmi_button_about) {
-				lv_btn_set_state(hmi_button_control, LV_STATE_DEFAULT);
-				lv_btn_set_state(hmi_button_settings, LV_STATE_DEFAULT);
-				lv_btn_set_state(hmi_button_about, LV_STATE_CHECKED);
-				lv_tabview_set_tab_act(hmi_tabview, 2, LV_ANIM_OFF);
-			}
+		uint16_t id = lv_btnmatrix_get_active_btn(hmi_btnmatrix_tabview);
+		if (id >= 0 && id <= 2) {
+			lv_tabview_set_tab_act(hmi_tabview, id, LV_ANIM_ON);
 		}
 	}
 }
 
-static lv_obj_t* hmi_create_toolbar_button(lv_obj_t *parent, uint16_t x, uint16_t y,
-		const char *text) {
-	lv_obj_t *button = lv_btn_create(parent, NULL);
-	lv_obj_set_pos(button, x, y);
-	lv_obj_set_size(button, HMI_BUTTON_WIDTH, HMI_BUTTON_HEIGHT);
-	lv_btn_set_checkable(button, true);
-	lv_obj_set_event_cb(button, hmi_toolbar_button_event_cb);
-	lv_obj_t *label = lv_label_create(button, NULL);
-	lv_label_set_text(label, text);
-	return button;
+static const char *hmi_navigation_map[] = { "Control", "Settings", "About", "" };
+
+static lv_obj_t* hmi_create_navigation_btnmatrix(lv_obj_t *parent, lv_coord_t x,
+		lv_coord_t y, lv_coord_t w, lv_coord_t h) {
+
+	lv_obj_t *matrix = lv_btnmatrix_create(parent, NULL);
+	lv_obj_clean_style_list(matrix, LV_BTNMATRIX_PART_BG);
+	lv_obj_set_pos(matrix, x, y);
+	lv_obj_set_size(matrix, w, h);
+
+	lv_btnmatrix_set_map(matrix, hmi_navigation_map);
+	lv_btnmatrix_set_one_check(matrix, true);
+	lv_btnmatrix_set_btn_ctrl(matrix, 0, LV_BTNMATRIX_CTRL_CHECKABLE);
+	lv_btnmatrix_set_btn_ctrl(matrix, 1, LV_BTNMATRIX_CTRL_CHECKABLE);
+	lv_btnmatrix_set_btn_ctrl(matrix, 2, LV_BTNMATRIX_CTRL_CHECKABLE);
+	lv_btnmatrix_set_btn_ctrl(matrix, 0, LV_BTNMATRIX_CTRL_CHECK_STATE);
+	lv_obj_set_event_cb(matrix, hmi_navigation_event_cb);
+	return matrix;
 }
 
 static lv_obj_t* hmi_create_toolbar(lv_obj_t *parent) {
 	lv_obj_t *toolbar = lv_obj_create(parent, NULL);
-	//lv_obj_clean_style_list(toolbar, LV_OBJ_PART_MAIN);
+	lv_obj_clean_style_list(toolbar, LV_OBJ_PART_MAIN);
 	lv_obj_set_size(toolbar, LV_HOR_RES, HMI_TOOLBAR_HEIGHT);
 
 	hmi_label_clock = hmi_create_label(toolbar, LV_DPX(10), LV_DPX(10),
@@ -100,13 +88,8 @@ static lv_obj_t* hmi_create_toolbar(lv_obj_t *parent) {
 	hmi_label_control_mode = hmi_create_label(toolbar, LV_DPX(60), LV_DPX(22),
 			"OFF");
 
-	hmi_button_control = hmi_create_toolbar_button(toolbar, LV_DPX(130),
-			LV_DPX(2), "Control");
-	hmi_button_settings = hmi_create_toolbar_button(toolbar, LV_DPX(230),
-			LV_DPX(2), "Settings");
-	hmi_button_about = hmi_create_toolbar_button(toolbar, LV_DPX(330),
-			LV_DPX(2), "About");
-	lv_btn_set_state(hmi_button_control, LV_STATE_CHECKED);
+	hmi_btnmatrix_tabview = hmi_create_navigation_btnmatrix(toolbar,
+			LV_DPX(130), LV_DPX(3), LV_DPX(250), HMI_TOOLBAR_HEIGHT + 2);
 
 	hmi_led_light_switch = hmi_create_led(toolbar,
 	LV_HOR_RES - HMI_LED_WIDTH * 4 - LV_DPX(5) * 4, LV_DPX(5), "L");

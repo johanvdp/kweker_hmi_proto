@@ -11,7 +11,7 @@ void hmi_initialize();
  * -------
  */
 
-/** current time */
+/** current time [24h] */
 extern lv_obj_t *hmi_label_clock;
 /** current circadian [day, night] */
 extern lv_obj_t *hmi_label_circadian;
@@ -19,12 +19,8 @@ extern lv_obj_t *hmi_label_circadian;
 extern lv_obj_t *hmi_label_control_mode;
 /** tab page holder */
 extern lv_obj_t *hmi_tabview;
-/** button navigate to tab control */
-extern lv_obj_t *hmi_button_control;
-/** button navigate to tab settings */
-extern lv_obj_t *hmi_button_settings;
-/** button navigate to tab about */
-extern lv_obj_t *hmi_button_about;
+/** tab page navigation buttons */
+extern lv_obj_t *hmi_btnmatrix_tabview;
 /** current light switch state [off, on] */
 extern lv_obj_t *hmi_led_light_switch;
 /** current heater switch state [off, on] */
