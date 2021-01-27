@@ -17,10 +17,6 @@ extern lv_obj_t *hmi_label_clock;
 extern lv_obj_t *hmi_label_circadian;
 /** current control mode [off, manual, automatic] */
 extern lv_obj_t *hmi_label_control_mode;
-/** tab page holder */
-extern lv_obj_t *hmi_tabview;
-/** tab page navigation buttons */
-extern lv_obj_t *hmi_btnmatrix_tabview;
 /** current light switch state [off, on] */
 extern lv_obj_t *hmi_led_light_switch;
 /** current heater switch state [off, on] */
