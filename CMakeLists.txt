@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR})
 
-file(GLOB_RECURSE INCLUDES "lv_drivers/*.h" "lvgl/*.h"  "./*.h" )
-file(GLOB_RECURSE SOURCES  "lv_drivers/*.c" "lvgl/*.c" )
+file(GLOB_RECURSE INCLUDES "lv_drivers/*.h" "lvgl/*.h" "hmi/*.h")
+file(GLOB_RECURSE SOURCES  "lv_drivers/*.c" "lvgl/*.c" "hmi/*.c")
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin) 
 

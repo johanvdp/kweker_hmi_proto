@@ -15,7 +15,7 @@
 #include "lvgl/lvgl.h"
 #include "lv_drivers/display/monitor.h"
 #include "lv_drivers/indev/mouse.h"
-#include "hmi.h"
+#include "hmi/hmi.h"
 
 /*********************
  *      DEFINES
